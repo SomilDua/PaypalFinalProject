@@ -1,0 +1,382 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Product Manager",
+    "description": "Product Management System.",
+    "version": "0.1.a"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/product_home": {
+      "get": {
+        "summary": "Home Page for product management",
+        "description": null,
+        "responses": {
+          "200": {
+            "description": "Working"
+          }
+        }
+      }
+    },
+    "/product_home/add_product": {
+      "post": {
+        "summary": "Adds a product to the list.",
+        "description": "Adds a product to the total product list",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "product",
+            "description": "The product to create.",
+            "schema": {
+              "$ref": "#/definitions/product_fetch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Added",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Check Product SKU format"
+          }
+        }
+      }
+    },
+    "/product_home/edit_product": {
+      "put": {
+        "summary": "Edits a product on the list.",
+        "description": "Edits a product on the total product list",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "product",
+            "description": "The product to edit.",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Edited",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Check Product SKU format"
+          }
+        }
+      }
+    },
+    "/check_details/{sku}": {
+      "get": {
+        "summary": "Get the details of a product",
+        "description": null,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sku",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Sent",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          }
+        }
+      }
+    },
+    "/check_inventory/{sku}": {
+      "get": {
+        "summary": "Get the inventory of a product",
+        "description": null,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sku",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Sent",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/edit_inventory/{sku}/{invent}": {
+      "get": {
+        "summary": "Edit the inventory of a product",
+        "description": null,
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sku",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "invent",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventory Changed",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/product_list": {
+      "get": {
+        "summary": "Get the list of all the products",
+        "description": "Gets an array array with product SKU and ",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/list"
+            }
+          }
+        }
+      }
+    },
+    "/Generate_taxes": {
+      "get": {
+        "summary": "This gets the tax to be paid",
+        "description": "Calculates and files all GST",
+        "responses": {
+          "200": {
+            "description": "Tax to be paid",
+            "schema": {
+              "$ref": "#/definitions/tax_return"
+            }
+          }
+        }
+      }
+    },
+    "/order_new": {
+      "post": {
+        "summary": "Creates A new order",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "product",
+            "description": "The order to create.",
+            "schema": {
+              "$ref": "#/definitions/order_fetch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed inventory",
+            "schema": {
+              "$ref": "#/definitions/list"
+            }
+          }
+        }
+      }
+    },
+    "/order_details": {
+      "post": {
+        "summary": "Gets details of A existing order",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "id",
+            "description": "The order to edit.",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed inventory",
+            "schema": {
+              "$ref": "#/definitions/list"
+            }
+          }
+        }
+      }
+    },
+    "/order_cancel/{id}": {
+      "get": {
+        "summary": "Cancels an existing order",
+        "description": "Cancels an order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the oreder to be canceled",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order Deleted"
+          },
+          "404": {
+            "description": "Order Not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "product": {
+      "type": "object",
+      "required": [
+        "SKU"
+      ],
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "traits_id": {
+          "type": "string"
+        },
+        "tax_id": {
+          "type": "integer"
+        },
+        "parent_sku": {
+          "type": "string"
+        },
+        "inventory": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "integer"
+        },
+        "cost": {
+          "type": "integer"
+        },
+        "SKU": {
+          "type": "string"
+        }
+      }
+    },
+    "product_fetch": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "traits_id": {
+          "type": "string"
+        },
+        "tax_id": {
+          "type": "integer"
+        },
+        "parent_sku": {
+          "type": "string"
+        },
+        "inventory": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "integer"
+        },
+        "cost": {
+          "type": "integer"
+        }
+      }
+    },
+    "list": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "tax_return": {
+      "type": "object",
+      "properties": {
+        "Total_tax": {
+          "type": "integer"
+        },
+        "Average_taxpaid": {
+          "type": "integer"
+        }
+      }
+    },
+    "order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "product_sku": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quantity": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "Total_cost": {
+          "type": "integer"
+        }
+      }
+    },
+    "order_fetch": {
+      "type": "object",
+      "properties": {
+        "product_sku": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quantity": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "Total_cost": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
